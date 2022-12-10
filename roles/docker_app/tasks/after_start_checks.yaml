@@ -1,0 +1,34 @@
+---
+ - name: validate nginx config
+   command: "docker exec {{app_name}} nginx -t"
+   changed_when: false
+   check_mode: false
+   register: validate_conf
+   failed_when:
+     - '"syntax is ok" not in validate_conf.stderr'
+     - '"test is successful" not in validate_conf.stderr'
+
+ - name: Restart {{app_name}}
+   command: "docker restart {{app_name}}"
+   register: docker_restart
+   failed_when:
+     - docker_restart.rc != 0
+
+ - name: Check {{app_name}} started
+   docker_container:
+      name: "{{app_name}}"
+      state: started
+   register: check_started
+   failed_when:
+     - '"running" not in check_started.container.State.Status'
+   #  - '"True" not in check_started.container.State.Running'
+     - check_started.container.State.ExitCode != 0
+
+ - name: Check port {{app_port}} of {{app_name}} accepting connections via balancer
+   command: "docker exec nginx telnet {{app_ipv4}} {{app_port}}"
+   register: check_conn_http
+   failed_when:
+     - '"Connected to" not in check_conn_http.stdout'
+     - check_conn_http.rc != 0
+
+# - debug: msg={{check_conn_http}}

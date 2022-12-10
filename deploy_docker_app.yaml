@@ -1,0 +1,32 @@
+---
+ - name: deploy new version docker app
+   hosts: app
+   gather_facts: yes
+   become: True
+   #vars:
+   #  volumes:
+   #   /APP/{{container}}:/APP
+   #  - "{{app_base_dir}}:{{app_docker_dir}}"
+   #   /LOGS/{{container}}:/LOGS
+   #  - "{{app_logs_dir}}:{{logs_docker_dir}}"
+   roles:
+     - role: docker_app
+       app_name: app_test
+       tags: app_test
+
+     - role: docker_app
+       app_name: app_1
+       tags: app_1
+
+     - role: docker_app
+       app_name: app_2
+       tags: app_2
+
+     - role: docker_app
+       app_name: app_3
+       tags: app_3
+
+     - role: docker_app
+       app_name: app_4
+       tags: app_4
+

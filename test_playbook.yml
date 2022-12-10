@@ -1,0 +1,23 @@
+ - name: install-req-app-in-docker
+   become: False
+   hosts: oracle_vm
+   tasks:
+       - name:  date && uptime
+         shell: "date && uptime"
+         register: uptime
+
+       - debug:
+             msg: "{{uptime.stdout_lines}}"
+
+       - name: start docker all
+         command: docker start nginx app_1 app_2 app_3 app_4
+
+       - name: app_3
+         command: docker exec -it app_3 /bin/bash -c "apt update"
+
+       - name: stop docker all
+         command: docker stop nginx app_1 app_2 app_3 app_4
+
+
+
+

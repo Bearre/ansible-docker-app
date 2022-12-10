@@ -1,0 +1,27 @@
+---
+# - name: Copy application files (HTML)
+#   copy:
+#     src: "{{HTML}}"
+#     dest: "{{app_html_dir}}"
+#     mode: 0666
+#   ignore_errors: True
+
+ - name: Copy HTML
+   copy:
+     src: "{{item.src}}"
+     dest: "{{item.dest}}"
+     mode: 0777
+   with_items:
+     - {src: "index.html", dest: "{{APP_HTML_DIR}}/main" }
+     - {src: "offer.html", dest: "{{APP_HTML_DIR}}/offer"}
+
+ - name: Copy config
+   template:
+     src: "{{item.src}}"
+     dest: "{{item.dest}}"
+     mode: 0644
+     backup: yes
+   with_items:
+     - {src: "nginx.conf", dest: "{{app_base_dir}}/{{app_name}}/config" }
+     - {src: "mime.types", dest: "{{app_base_dir}}/{{app_name}}/config" }
+     - {src: "default.conf", dest: "{{config_dest}}/conf.d/"}

@@ -1,0 +1,46 @@
+---
+ - name: Destroy docker containers
+   command: docker stop "{{app_name}}"
+   command: docker rm -f "{{app_name}}"
+   ignore_errors: yes
+
+ - name: Clean HTML files dirictory
+   file:
+     state: absent
+     path: "{{item}}"
+   with_items:
+    - "{{APP_HTML_DIR}}/main"
+    - "{{APP_HTML_DIR}}/offer"
+   ignore_errors: yes
+
+ - name: Clean config dir
+   file:
+     state: absent
+     path: "{{config_dest}}"
+   ignore_errors: yes
+
+ - name: Copy old logs
+   command: 'mv "{{app_logs_dir}}"/error.log "{{app_logs_dir}}"/error-{{app_name}}-{{ansible_date_time.iso8601}}.log'
+   command: 'mv "{{app_logs_dir}}"/access.log "{{app_logs_dir}}"/access-{{app_name}}-{{ansible_date_time.iso8601}}.log'
+
+ - name: Clean logs
+   file:
+     state: absent
+     path: "{{app_logs_dir}}"
+   when: "{{clean_logs}} == yes"
+   ignore_errors: yes
+
+ - name: Create directories for app
+   file:
+      state: directory
+      path: "{{item}}"
+      mode: 0775
+   with_items:
+    - "{{app_base_dir}}"
+    - "{{APP_HTML_DIR}}/main"
+    - "{{APP_HTML_DIR}}/offer"
+    - "{{app_base_dir}}/{{app_name}}/{{artifact}}"
+    - "{{config_dest}}"
+    - "{{config_dest}}/conf.d"
+    - "{{app_logs_dir}}"
+

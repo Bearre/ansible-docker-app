@@ -1,0 +1,27 @@
+#APP VARIABLES
+app_port: 80
+app_ipv4: docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' '{{app_name}}'
+#app_name: app_test
+image_name: "app_nginx_server"
+image_version: "1.0.0"
+app_docker_dir: "/APP"
+app_base_dir: "/APP"
+docker_html_dir: "/APP/HTML/"
+artifact: "iso2215_artifact"
+#item_src: "/etc/ansible"
+index: "index.html"
+APP_HTML_DIR: "/APP/{{app_name}}/HTML"
+app_add_files: "index.html"
+extra_docker_vars: ""
+
+
+#CONFIGS 
+config_dest: "{{app_base_dir}}/{{app_name}}/config"
+config_docker_dir: "/etc/nginx"
+config: "nginx.conf"
+configs: "nginx.conf"
+
+
+#LOGS VARIABLES
+docker_logs_dir: "/LOGS"
+app_logs_dir: "/LOGS/{{app_name}}"

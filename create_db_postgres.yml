@@ -1,0 +1,4 @@
+- hosts: postgres
+  become: no
+  roles:
+        -  deploy_postgres

@@ -1,0 +1,19 @@
+ - include: prepare_env.yaml
+ - include: configure.yaml
+
+ - name: Start docker app
+   command: "docker run -d
+       --expose {{app_port}}
+       --restart=on-failure:3
+       --hostname={{app_name}}
+       --net app-network
+       -w {{config_docker_dir}}
+       -e LANG=C.UTF-8
+       -v {{APP_HTML_DIR}}:{{docker_html_dir}}
+       -v {{app_base_dir}}/{{app_name}}/{{artifact}}:{{app_docker_dir}}/{{artifact}}
+       -v {{config_dest}}:{{config_docker_dir}}
+       -v {{app_logs_dir}}:{{docker_logs_dir}}
+       {{extra_docker_vars}}
+       --name {{app_name}} {{image_name}}:{{image_version}}"
+
+ - include: after_start_checks.yaml

@@ -1,0 +1,20 @@
+---
+ - name: validate config file
+   command: "docker exec {{app_name}} nginx -t"
+   changed_when: false
+   check_mode: false
+
+ - name: restart {{app_name}}
+   command: "docker restart {{app_name}}"
+
+ - name: restart "{{app_name}}"
+   docker_container:
+      name: "{{app_name}}"
+      state: started
+
+#   - name: ensure {{app_name}} is runnung
+#     service:
+#     name: "{{app_name}}"
+#     state: started
+#     enabled: yes
+#     tags: "{{app_name}}"
