@@ -1,0 +1,253 @@
+#version: "3.9"
+services:
+  balancer:
+    image: nginx_balancer:1.1.1
+    container_name: balancer
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /APP/balancer/config:/etc/nginx
+      - /APP/balancer/HTML
+      - /LOGS/balancer:/LOGS
+   # user: 1000:1000
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100K"
+        max-file: "5"
+    #/etc/hosts
+    extra_hosts:
+     - "nginx:12.12.0.2"
+     - "app_1:12.12.0.3"
+     - "app_2:12.12.0.4"
+     - "app_3:12.12.0.5"
+     - "app_4:12.12.0.6"
+    networks:
+      app_net:
+        ipv4_address: 12.12.0.2
+        #ipv6_address: 2001:3984:3989::10
+    healthcheck:
+      test: ["CMD-SHELL", "(service nginx status && curl -f http://nginx/health_check/) || exit 1"]
+      # between checks
+      interval: 30s
+      # IF check is longer then failed
+      timeout: 30s
+      # Before unhealthy
+      retries: 3
+      # Фэйлы healthcheck в этот период игнорируются
+      start_period: 60s
+    deploy:
+      resources:
+        # MUST prevent container to allocate more
+        limits:
+          # number of cores
+          cpus: '0.75'
+          memory: '50M'
+        reservations:
+          cpus: '0.15'
+          memory: '20M'
+      restart_policy:
+        condition: always
+        # between fails
+        delay: 5s
+        # deciding if a restart has succeeded
+        window: 60s
+      #rollback_config:
+      #update_config:
+    working_dir: "/etc/nginx"
+
+  node_5:
+    image: app_nginx_server:1.0.0
+    container_name: app_5
+    expose: [80]
+    #enviroment:
+    #  - LANG="C.UTF-8"
+    volumes:
+      - /APP/app_5/HTML:/APP/HTML
+      - /APP/app_5/config:/etc/nginx
+      - /LOGS/app_5:/LOGS
+    #user: 1000:1000
+    depends_on:
+      - balancer
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100K"
+        max-file: "5"
+    networks:
+      app_net:
+        ipv4_address: 12.12.0.3
+          #ipv6_address: 2001:3984:3989::10
+    healthcheck:
+      test: ["CMD-SHELL", "service nginx status || exit 1"]
+      interval: 60s
+      timeout: 30s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.55'
+          memory: '25M'
+        reservations:
+          cpus: '0.1'
+          memory: '10M'
+      restart_policy:
+        condition: on-failure
+        max_attempts: 5
+        delay: 15s
+        window: 120s
+      #rollback_config:
+      #update_config:
+    working_dir: "/etc/nginx"
+
+  node_6:
+    image: app_nginx_server:1.0.0
+    container_name: app_6
+    expose: [80]
+    #enviroment:
+    #  - LANG="C.UTF-8"
+    volumes:
+      - /APP/app_6/HTML:/APP/HTML
+      - /APP/app_6/config:/etc/nginx
+      - /LOGS/app_6:/LOGS
+    #user: 1000:1000
+    depends_on:
+      - balancer
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100K"
+        max-file: "5"
+    networks:
+      app_net:
+        ipv4_address: 12.12.0.4
+        #ipv6_address: 2001:3984:3989::10
+    healthcheck:
+      test: ["CMD-SHELL", "service nginx status || exit 1"]
+      interval: 60s
+      timeout: 30s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.55'
+          memory: '25M'
+        reservations:
+          cpus: '0.1'
+          memory: '10M'
+      restart_policy:
+        condition: on-failure
+        max_attempts: 5
+        delay: 15s
+        window: 120s
+      #rollback_config:
+      #update_config:
+    working_dir: "/etc/nginx"
+
+  node_7:
+    image: app_nginx_server:1.0.0
+    container_name: app_7
+    expose: [80]
+    #enviroment:
+    #  - LANG="C.UTF-8"
+    volumes:
+      - /APP/app_7/HTML:/APP/HTML
+      - /APP/app_7/config:/etc/nginx
+      - /LOGS/app_7:/LOGS
+    #user: 1000:1000
+    depends_on:
+      - balancer
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100K"
+        max-file: "5"
+    networks:
+      app_net:
+        ipv4_address: 12.12.0.5
+        #ipv6_address: 2001:3984:3989::10
+    healthcheck:
+      test: ["CMD-SHELL", "service nginx status || exit 1"]
+      interval: 60s
+      timeout: 30s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.55'
+          memory: '25M'
+        reservations:
+          cpus: '0.1'
+          memory: '10M'
+      restart_policy:
+        condition: on-failure
+        max_attempts: 5
+        delay: 15s
+        window: 120s
+      #rollback_config:
+      #update_config:
+    working_dir: "/etc/nginx"
+
+  node_8:
+    image: app_nginx_server:1.0.0
+    container_name: app_8
+    expose: [80]
+    #enviroment:
+    #  - LANG="C.UTF-8"
+    volumes:
+      - /APP/app_8/HTML:/APP/HTML
+      - /APP/app_8/config:/etc/nginx
+      - /LOGS/app_8:/LOGS
+    #user: 1000:1000
+    depends_on:
+      - balancer
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100K"
+        max-file: "5"
+    networks:
+      app_net:
+        ipv4_address: 12.12.0.6
+        #ipv6_address: 2001:3984:3989::10
+    healthcheck:
+      test: ["CMD-SHELL", "service nginx status || exit 1"]
+      interval: 60s
+      timeout: 30s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.55'
+          memory: '25M'
+        reservations:
+          cpus: '0.1'
+          memory: '10M'
+      restart_policy:
+        condition: on-failure
+        max_attempts: 5
+        delay: 15s
+        window: 120s
+      #rollback_config:
+      #update_config:
+    working_dir: "/etc/nginx"
+
+networks:
+  app_net:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "true"
+    ipam:
+      driver: default
+      config:
+      - subnet: 12.12.0.0/24
+        ip_range: 12.12.0.0/24
+        gateway: 12.12.0.1
+      - subnet: 2001:3984:3989::/64
+        gateway: 2001:3984:3989::1
+
