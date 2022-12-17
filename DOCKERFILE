@@ -3,16 +3,12 @@
 
 FROM app_nginx_server:1.0.0
 
-#MAINTEIN MIKHAIL FEDOTOV <MMFEDOTOV@alfabank.ru>"
 LABEL nginx based app
 
 RUN groupadd -r dockeradm && useradd -r -g dockeradm dockeradm 
 RUN mkdir /LOGS && mkdir -p /APP/HTML/
 RUN chown -R dockeradm:dockeradm /var/run/nginx.pid && chown -R dockeradm:dockeradm /LOGS && chown -R dockeradm:dockeradm /APP/*
 
-#RUN apt-get update -y
-#RUN apt-get install -y procps
-#COPY --chown=dockeradm:dockeradm  /
 USER dockeradm
 
 WORKDIR /etc/nginx
