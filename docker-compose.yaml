@@ -19,10 +19,10 @@ services:
     #/etc/hosts
     extra_hosts:
      - "nginx:12.12.0.2"
-     - "app_1:12.12.0.3"
-     - "app_2:12.12.0.4"
-     - "app_3:12.12.0.5"
-     - "app_4:12.12.0.6"
+     - "node_1:12.12.0.3"
+     - "node_2:12.12.0.4"
+     - "node_3:12.12.0.5"
+     - "node_4:12.12.0.6"
     networks:
       app_net:
         ipv4_address: 12.12.0.2
@@ -57,16 +57,16 @@ services:
       #update_config:
     working_dir: "/etc/nginx"
 
-  node_5:
-    image: app_nginx_server:1.0.0
-    container_name: app_5
+  node_1:
+    image: app_nginx_server:1.1.0
+    container_name: node_1
     expose: [80]
     #enviroment:
     #  - LANG="C.UTF-8"
     volumes:
-      - /APP/app_5/HTML:/APP/HTML
-      - /APP/app_5/config:/etc/nginx
-      - /LOGS/app_5:/LOGS
+      - /APP/node_1/HTML:/APP/HTML
+      - /APP/node_1/config:/etc/nginx
+      - /LOGS/node_1:/LOGS
     #user: 1000:1000
     depends_on:
       - balancer
@@ -102,16 +102,16 @@ services:
       #update_config:
     working_dir: "/etc/nginx"
 
-  node_6:
-    image: app_nginx_server:1.0.0
-    container_name: app_6
+  node_2:
+    image: app_nginx_server:1.1.0
+    container_name: node_2
     expose: [80]
     #enviroment:
     #  - LANG="C.UTF-8"
     volumes:
-      - /APP/app_6/HTML:/APP/HTML
-      - /APP/app_6/config:/etc/nginx
-      - /LOGS/app_6:/LOGS
+      - /APP/node_2/HTML:/APP/HTML
+      - /APP/node_2/config:/etc/nginx
+      - /LOGS/node_2:/LOGS
     #user: 1000:1000
     depends_on:
       - balancer
@@ -147,16 +147,16 @@ services:
       #update_config:
     working_dir: "/etc/nginx"
 
-  node_7:
-    image: app_nginx_server:1.0.0
-    container_name: app_7
+  node_3:
+    image: app_nginx_server:1.1.0
+    container_name: node_3
     expose: [80]
     #enviroment:
     #  - LANG="C.UTF-8"
     volumes:
-      - /APP/app_7/HTML:/APP/HTML
-      - /APP/app_7/config:/etc/nginx
-      - /LOGS/app_7:/LOGS
+      - /APP/node_3/HTML:/APP/HTML
+      - /APP/node_3/config:/etc/nginx
+      - /LOGS/node_3:/LOGS
     #user: 1000:1000
     depends_on:
       - balancer
@@ -192,16 +192,16 @@ services:
       #update_config:
     working_dir: "/etc/nginx"
 
-  node_8:
-    image: app_nginx_server:1.0.0
-    container_name: app_8
+  node_4:
+    image: app_nginx_server:1.1.0
+    container_name: node_4
     expose: [80]
     #enviroment:
     #  - LANG="C.UTF-8"
     volumes:
-      - /APP/app_8/HTML:/APP/HTML
-      - /APP/app_8/config:/etc/nginx
-      - /LOGS/app_8:/LOGS
+      - /APP/node_4/HTML:/APP/HTML
+      - /APP/node_4/config:/etc/nginx
+      - /LOGS/node_4:/LOGS
     #user: 1000:1000
     depends_on:
       - balancer
